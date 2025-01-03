@@ -177,71 +177,45 @@ void saveCategoryToFile() {
 
 
 void addCategory() {
+	int flag = 0;
+	int found = 0;
     for (int i = 0; i < 10; i++) {
         if (strlen(category[i].CategoryId) == 0) {
             printf("\tThem danh muc moi:\n");
-            int validId = 0;
-            do {
-                printf("\tID danh muc (max 10 ky tu): ");
-				getchar();
-                fgets(category[i].CategoryId, sizeof(category[i].CategoryId), stdin);
-                category[i].CategoryId[strcspn(category[i].CategoryId, "\n")] = '\0';
-
-                if (strlen(category[i].CategoryId) > 10) {
-                    printf("\tID danh muc qua dai, vui long nhap lai (max 10 ky tu).\n");
-                } else if (strlen(category[i].CategoryId) < 10 && strlen(category[i].CategoryId) > 0){
-                    validId = 1;
-                }
-            } while (!validId);
-            int dulicate = 0;
+            printf("\tID danh muc: ");
+            while (getchar() != '\n');
+            fgets(category[i].CategoryId, sizeof(category[i].CategoryId), stdin);
+            category[i].CategoryId[strcspn(category[i].CategoryId, "\n")] = '\0';
             for (int j = 0; j < i; j++) {
                 if (strcmp(category[i].CategoryId, category[j].CategoryId) == 0) {
+                	found = 1;
                     printf("\tID danh muc da ton tai!\n");
-                    dulicate = 1;
                     break;
                 }
-//                if(strcmp(category[i].CategoryName, category[j].CategoryName) == 0){
-//                	printf("\tTen danh muc da ton tai\n");
-//                	dulicate = 1;
-//                	break;
-//				}
-            }
-            if(dulicate) {
-            	return;
-			}
-            int validName = 0;
-            do {
-                printf("\tTen danh muc (max 30 ky tu): ");
-//                while(getchar() != '\n');
-                fgets(category[i].CategoryName, sizeof(category[i].CategoryName), stdin);
-                category[i].CategoryName[strcspn(category[i].CategoryName, "\n")] = '\0';
-
-                if (strlen(category[i].CategoryName) > 30) {
-                    printf("\tTen danh muc qua dai, vui long nhap lai (max 30 ky tu).\n");
-                } else if(strlen(category[i].CategoryName) < 30 && strlen(category[i].CategoryName) > 0){
-                    validName = 1;
-                }
-            }while (!validName);
-            	for(int j = 0; j < i; j++){
-            		if(strcmp(category[i].CategoryName, category[j].CategoryName) == 0){
-                	printf("\tTen danh muc da ton tai\n");
-                	dulicate = 1;
+                if(strlen(category[i].CategoryId) <= 0){
+                	flag = 1;
+                	printf("\tKhong hop le!\n");
                 	break;
-			    } 
-			}	
-				if(dulicate) {
+				}
+            }
+            if(found) {
             	return;
 			}
-            	
-           	 	printf("\tThem danh muc thanh cong!\n");
-           	 	numberCategory++;
-            	saveCategoryToFile();
+            if(flag) {
             	return;
-        }		
-        		
+			}
+            printf("\tTen danh muc: ");
+            fgets(category[i].CategoryName, sizeof(category[i].CategoryName), stdin);
+            category[i].CategoryName[strcspn(category[i].CategoryName, "\n")] = '\0';
+            printf("\tThem danh muc thanh cong!\n");
+            numberCategory++;
+            saveCategoryToFile();
+            return;
+        }
     }
     printf("\tDanh sach danh muc da day, khong the them moi!\n");
 }
+
 
 // ham tai danh muc
 void loadCategoryFromFile() {
